@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Calculates valid paths for crossing a 'road' grid
  * 
- * Accepts and validates a user input grid consisting of Xs and Os, representing
+ * Accepts and validates a user-input grid consisting of Xs and Os, representing
  * traversable space and potholes (untraversable), respectively. A random, non-
  * pothole space on the left is then selected and all valid paths to the right-
  * hand side from that space are calculated and printed.
@@ -20,6 +20,11 @@ import java.util.Random;
  */
 public class ChickenRoad {
 
+	/**
+	 * Main method
+	 * 
+	 * @param args
+	 */
     public static void main(String[] args) {
         System.out.print("Input the road grid below, row by row. The letter 'O' represents a traversable space,\n"
                 + "while the letter 'X' represents a pothole. Use a semicolon to denote the end of the input.\n"
@@ -132,6 +137,17 @@ public class ChickenRoad {
         return;
     }
     
+    /**
+     * Recursively checks adjacent road tiles, builds path strings, and counts the
+     * total number of valid paths. When a path reaches the destination, the path
+     * string is printed.
+     * 
+     * @param x
+     * @param y
+     * @param road
+     * @param path
+     * @param pathCount
+     */
     public static void checkTile(int x, int y, char[][] road, String path, int[] pathCount) {
         // check if tile is outside road or if tile is untraversable; if true, return
         if(x < 0 || y < 0 || x > (road.length-1) || y > (road[0].length-1) || road[x][y] == 'X') {
