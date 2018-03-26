@@ -21,7 +21,7 @@ import java.util.Random;
 public class ChickenRoad {
 
     public static void main(String[] args) {
-        System.out.print("Input the road grid, row by row. The letter 'O' represents a traversable space,\n"
+        System.out.print("Input the road grid below, row by row. The letter 'O' represents a traversable space,\n"
                 + "while the letter 'X' represents a pothole. Use a semicolon to denote the end of the input.\n"
                 + "Input is case-insensitive, and all whitespace will be ignored.\n");
         
@@ -33,7 +33,7 @@ public class ChickenRoad {
         
         // scan for user input
         while(!endOfInput) {
-            System.out.print("> ");
+            
             String newRow = scan.nextLine();
             
             // if a semicolon is detected, ignore all inputs following it and signal end of input
@@ -49,7 +49,7 @@ public class ChickenRoad {
                 Pattern inputRegex = Pattern.compile("[oxOX ]+");
                 Matcher matcher = inputRegex.matcher(newRow);
                 if(!matcher.matches()) {
-                    System.out.println("Error: Invalid character");
+                    System.out.println("ERROR: Invalid character");
                     System.exit(1);
                 }
                 
@@ -64,7 +64,7 @@ public class ChickenRoad {
                 } else {
                     int currentWidth = rowElements.length;
                     if(currentWidth != width) {
-                        System.out.println("Error: inconsistent row width");
+                        System.out.println("ERROR: Inconsistent row width");
                         System.exit(1);
                     }
                 }
@@ -78,7 +78,7 @@ public class ChickenRoad {
         
         // check if the grid is empty
         if(gridList.size() == 0) {
-            System.out.println("Error: Empty grid");
+            System.out.println("ERROR: Empty grid");
             System.exit(1);
         };
         
@@ -102,7 +102,7 @@ public class ChickenRoad {
         
         // exit if there are no valid starting points
         if(yStartPts.size() == 0) {
-            System.out.println("Error: no valid starting points");
+            System.out.println("ERROR: No valid starting points");
             System.exit(1);
         }
         Random rng = new Random();
