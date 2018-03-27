@@ -35,7 +35,15 @@ A series of PHP scripts used to create tables in a MySQL database, then load the
 
 ### Usage
 
-First, replace the placeholder login credentials in `db_config.php` to that of the desired server, user, and database. For example:
+First, connect to your MySQL server and create a database with a name of your choosing. For example:
+
+```
+mysql> CREATE DATABASE codefoo8;
+```
+
+Note: you may require administrative privileges to perform this action.
+
+Next, open `db_config.php` and replace the placeholder login credentials to that of the desired server, user, and database. For example:
 
 ```php
 $servername = 'localhost';
@@ -46,14 +54,14 @@ $dbname = 'codefoo8';
 
 Make sure the user has been granted all privileges on the database, i.e. `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP`, and `REFERENCES`.
 
-Next, simply execute the following commands from the `RssLoader` directory:
+Now simply execute the following commands from the `RssLoader` directory:
 
 1. `php create_tables.php`
 2. `php load_rss_data.php`
 
-**Warning**: If using a pre-existing database, be aware that executing `php create_tables.php` will drop any tables named `content` or `content_types` in that database.
+**Warning**: If using a pre-existing database, be aware that executing `php create_tables.php` will drop any tables named `content_tag`, `tags`, `content`, `thumbnails`, `img_sizes`, `states`, `networks`, or `categories`.
 
-All done! The `content` and `content_types` tables should now be populated with RSS data using the design described below.
+All done! The tables should now be populated with RSS data from https://ign-apis.herokuapp.com/content/feed.rss.
 
 ### Database Design
 

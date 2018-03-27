@@ -20,11 +20,12 @@ if (!$conn) {
     die("MySQL connection failed: " . mysqli_connect_error());
 }
 
+mysqli_query($conn, "DROP TABLE IF EXISTS content_thumbnail;");
 mysqli_query($conn, "DROP TABLE IF EXISTS content_tag;");
 mysqli_query($conn, "DROP TABLE IF EXISTS tags;");
-mysqli_query($conn, "DROP TABLE IF EXISTS content;");
 mysqli_query($conn, "DROP TABLE IF EXISTS thumbnails;");
 mysqli_query($conn, "DROP TABLE IF EXISTS img_sizes;");
+mysqli_query($conn, "DROP TABLE IF EXISTS content;");
 mysqli_query($conn, "DROP TABLE IF EXISTS states;");
 mysqli_query($conn, "DROP TABLE IF EXISTS networks;");
 mysqli_query($conn, "DROP TABLE IF EXISTS categories;");
@@ -58,35 +59,9 @@ $querymsg = "CREATE TABLE states(
              );";
 
 if (mysqli_query($conn, $querymsg) === true) {
-echo "Table 'states' created successfully\n";
+    echo "Table 'states' created successfully\n";
 } else {
-echo "Error creating table: " . mysqli_error($conn) . "\n";
-}
-
-$querymsg = "CREATE TABLE img_sizes(
-             size_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-             size_name VARCHAR(255) UNIQUE NOT NULL,
-             width INT NOT NULL,
-             height INT NOT NULL
-             );";
-
-if (mysqli_query($conn, $querymsg) === true) {
-echo "Table 'img_sizes' created successfully\n";
-} else {
-echo "Error creating table: " . mysqli_error($conn) . "\n";
-}
-
-$querymsg = "CREATE TABLE thumbnails(
-             thumbnail_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-             thumbnail_url VARCHAR(255) UNIQUE NOT NULL,
-             size_id INT NOT NULL,
-             FOREIGN KEY (size_id) REFERENCES img_sizes(size_id)
-             );";
-
-if (mysqli_query($conn, $querymsg) === true) {
-echo "Table 'thumbnails' created successfully\n";
-} else {
-echo "Error creating table: " . mysqli_error($conn) . "\n";
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
 $querymsg = "CREATE TABLE content(
@@ -102,12 +77,39 @@ $querymsg = "CREATE TABLE content(
              thumbnail_id INT NOT NULL,
              FOREIGN KEY (category_id) REFERENCES categories(category_id),
              FOREIGN KEY (network_id) REFERENCES networks(network_id),
-             FOREIGN KEY (state_id) REFERENCES states(state_id),
-             FOREIGN KEY (thumbnail_id) REFERENCES thumbnails(thumbnail_id)
+             FOREIGN KEY (state_id) REFERENCES states(state_id)
              );";
 
 if (mysqli_query($conn, $querymsg) === true) {
     echo "Table 'content' created successfully\n";
+} else {
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
+}
+
+$querymsg = "CREATE TABLE img_sizes(
+             size_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+             size_name VARCHAR(255) UNIQUE NOT NULL,
+             width INT NOT NULL,
+             height INT NOT NULL
+             );";
+
+if (mysqli_query($conn, $querymsg) === true) {
+    echo "Table 'img_sizes' created successfully\n";
+} else {
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
+}
+
+$querymsg = "CREATE TABLE thumbnails(
+             thumbnail_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+             thumbnail_url VARCHAR(255) UNIQUE NOT NULL,
+             size_id INT NOT NULL,
+             content_id INT NOT NULL,
+             FOREIGN KEY (size_id) REFERENCES img_sizes(size_id),
+             FOREIGN KEY (content_id) REFERENCES content(content_id)
+             );";
+
+if (mysqli_query($conn, $querymsg) === true) {
+    echo "Table 'thumbnails' created successfully\n";
 } else {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
@@ -118,9 +120,9 @@ $querymsg = "CREATE TABLE tags(
              );";
 
 if (mysqli_query($conn, $querymsg) === true) {
-echo "Table 'tags' created successfully\n";
+    echo "Table 'tags' created successfully\n";
 } else {
-echo "Error creating table: " . mysqli_error($conn) . "\n";
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
 $querymsg = "CREATE TABLE content_tag(
@@ -132,9 +134,23 @@ $querymsg = "CREATE TABLE content_tag(
              );";
 
 if (mysqli_query($conn, $querymsg) === true) {
-echo "Table 'content_tag' created successfully\n";
+    echo "Table 'content_tag' created successfully\n";
 } else {
-echo "Error creating table: " . mysqli_error($conn) . "\n";
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
+}
+
+$querymsg = "CREATE TABLE content_thumbnail(
+             content_id INT NOT NULL,
+             thumbnail_id INT NOT NULL,
+             PRIMARY KEY (content_id, thumbnail_id),
+             FOREIGN KEY (content_id) REFERENCES content(content_id),
+             FOREIGN KEY (thumbnail_id) REFERENCES thumbnails(thumbnail_id)
+             );";
+
+if (mysqli_query($conn, $querymsg) === true) {
+    echo "Table 'content_thumbnail' created successfully\n";
+} else {
+    echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 /*
 $querymsg = "INSERT INTO categories (content_type_name, directory_url)
