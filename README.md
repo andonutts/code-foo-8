@@ -18,9 +18,10 @@ Thank you for your time and consideration!
 
 ### Prerequisites
 
-
-
 ## 4. Back end: RssLoader
 
 ### Prerequisites
 
+## Survey
+
+I discovered this application via Twitter post by @IGN, which I was already following.
