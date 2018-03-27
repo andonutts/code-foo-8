@@ -74,7 +74,6 @@ $querymsg = "CREATE TABLE content(
              category_id INT NOT NULL,
              network_id INT NOT NULL,
              state_id INT NOT NULL,
-             thumbnail_id INT NOT NULL,
              FOREIGN KEY (category_id) REFERENCES categories(category_id),
              FOREIGN KEY (network_id) REFERENCES networks(network_id),
              FOREIGN KEY (state_id) REFERENCES states(state_id)
@@ -103,9 +102,7 @@ $querymsg = "CREATE TABLE thumbnails(
              thumbnail_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              thumbnail_url VARCHAR(255) UNIQUE NOT NULL,
              size_id INT NOT NULL,
-             content_id INT NOT NULL,
-             FOREIGN KEY (size_id) REFERENCES img_sizes(size_id),
-             FOREIGN KEY (content_id) REFERENCES content(content_id)
+             FOREIGN KEY (size_id) REFERENCES img_sizes(size_id)
              );";
 
 if (mysqli_query($conn, $querymsg) === true) {
