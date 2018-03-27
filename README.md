@@ -18,10 +18,56 @@ Thank you for your time and consideration!
 
 ### Prerequisites
 
+*  Java SE 1.7+
+
+### Usage
+
+
+
 ## 4. Back end: RssLoader
+
+A series of PHP scripts used to create tables in a MySQL database, then load them with RSS data from https://ign-apis.herokuapp.com/content/feed.rss.
 
 ### Prerequisites
 
+* PHP 5.6+
+* MySQL 5.7.X
+
+### Usage
+
+First, replace the placeholder login credentials in `db_config.php` to that of the desired server, user, and database. For example:
+
+```php
+$servername = 'localhost';
+$username = 'andy';
+$password = 'andy123';
+$dbname = 'codefoo8';
+```
+
+Make sure the user has been granted all privileges on the database, i.e. `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP`, and `REFERENCES`.
+
+Next, simply execute the following commands from the `RssLoader` directory:
+
+1. `php create_tables.php`
+2. `php load_rss_data.php`
+
+**Warning**: If using a pre-existing database, be aware that executing `php create_tables.php` will drop any tables named `content` or `content_types` in that database.
+
+All done! The `content` and `content_types` tables should now be populated with RSS data using the design described below.
+
+### Database Design
+
+<p align="center">
+  <img src="./RssLoader/rss_db.png" alt="Database diagram">
+</p>
+
+Inspecting `create_tables.php`, we can see that the following MySQL queries were used to generate the tables:
+
+```
+```
+
+My approach to designing the database began with an observation of the data to be stored. 
+
 ## Survey
 
-I discovered this application via Twitter post by @IGN, which I was already following.
+I discovered this application via Twitter post by @IGN.
