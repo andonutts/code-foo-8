@@ -142,11 +142,11 @@ public class ChickenRoad {
      * total number of valid paths. When a path reaches the destination, the path
      * string is printed.
      * 
-     * @param x
-     * @param y
-     * @param road
-     * @param path
-     * @param pathCount
+     * @param x         x-coordinate of tile
+     * @param y         y-coordinate of tile
+     * @param road      2D array representation of the road grid
+     * @param path      string representation of the current path
+     * @param pathCount number of successful paths
      */
     public static void checkTile(int x, int y, char[][] road, String path, int[] pathCount) {
         // check if tile is outside road or if tile is untraversable; if true, return

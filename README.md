@@ -32,7 +32,7 @@ To compile the Java program, open a shell instance and navigate to the `ChickenR
 
 There should now be a .class file in the same directory.
 
-Since the program uses the package `andypasti.chickenroad`, navigate back to the `ChickenRoad/src/` directory. From here, execute the Java class with the command:
+Since the program uses the package `andypasti.chickenroad`, navigate up to the `ChickenRoad/src/` directory. From here, execute the Java class with the command:
 
 ```
 > java andypasti.chickenroad.ChickenRoad
@@ -78,6 +78,7 @@ Note: The program selects a starting point at random, so your exact results may 
 ### Input validation
 
 The program performs input validation to prevent bad entries from confusing the algorithm. Specifically, the following cases are checked:
+  * Empty grids
   * Non-rectangular grids, i.e. the number of characters in a row varies
   * Invalid characters, i.e. any characters besides 'X' and 'O'
   * No valid starting points, i.e. the left column of the grid has no traversable spaces
@@ -96,7 +97,7 @@ O O O O;
 OXOX
 O O X O
 XO   OO
-O   O  O O;
+O    O   O  O ;
 ```
 ```
 o X o X
@@ -113,6 +114,46 @@ xooo
 oooo
 
 ;
+```
+
+### Implementation
+
+The path calculation is implemented using a recursive algorithm that checks each adjacent "tile" in the grid. In `ChickenRoad.java`, the algorithm is implemented by the method
+
+```java
+void checkTile(int x, int y, char[][] road, String path, int[] pathCount)
+```
+
+* `x` and `y` represent the coordinates of the tile that is being checked.
+* `road` is a 2D array representation of the entire road grid.
+* `path` is a String representation of the current path.
+* `pathCount` is a counter that stores the number of successful paths.
+
+Here's some pseudocode describing how it works:
+
+```
+function checkTile(x, y, road, path, pathCount) {
+  If (x, y) is outside the road Or road(x, y) is a pothole
+    Return
+  
+  Concatenate "(x, y)" to path
+
+  If x is equal to x-coordinate of right-hand side
+    Print path
+    Increment pathCount
+    Return
+
+  Set road(x, y) to pothole
+
+  Concatenate " -> " to path
+  checkTile(x, y + 1, road, path, pathCount);
+  checkTile(x + 1, y, road, path, pathCount);
+  checkTile(x, y - 1, road, path, pathCount);
+
+  Set road(x, y) to non-pothole
+
+  Return
+}
 ```
 
 ## 4. Back end: RssLoader
