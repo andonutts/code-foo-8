@@ -10,8 +10,8 @@ namespace Andypasti\RssLoader;
  * PHP version 7.2.3
  */
 
-$servername = 'servername';
-$username = 'username';
-$password = 'password';
-$dbname = 'dbname';
+$servername = 'localhost';
+$username = 'andy';
+$password = 'andy123';
+$dbname = 'codefoo';
 ?>
