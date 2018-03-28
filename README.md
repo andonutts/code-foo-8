@@ -94,7 +94,7 @@ O O O O;
 ```
 ```
 OXOX
-O O O X
+O O X O
 XO   OO
 O   O  O O;
 ```
