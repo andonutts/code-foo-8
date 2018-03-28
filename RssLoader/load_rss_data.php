@@ -26,17 +26,39 @@ for ($i = 1; $i <= 20; $i++) {
     }
 
     $content_list = $rss->channel->item;
-
+    
     // iterate through each RSS item and add it to the database
     foreach($content_list as $content) {
+        $ns_ign = $content->children('ign', true);
+        // echo $ns_ign->thumbnail[0]->attributes()['link'] . "\n";
         addContent(
             $content->title,
             $content->description,
-            $content->category,
             $content->pubDate,
             $content->link,
-            $content->guid
+            $ns_ign->slug,
+            $content->guid,
+            $content->category,
+            $ns_ign->network,
+            $ns_ign->state
         );
+
+        $tags = explode(",", $ns_ign->tags);
+        foreach($tags as $tag) {
+            if($tag != "") {
+                addContentTag($content->guid, $tag);
+            }
+        }
+        
+        foreach($ns_ign->thumbnail as $thumbnail) {
+            addContentThumbnail(
+                $content->guid, 
+                $thumbnail->attributes()['link'],
+                $thumbnail->attributes()['size'],
+                intval($thumbnail->attributes()['width']),
+                intval($thumbnail->attributes()['height'])
+            );
+        }
     }
 }
 

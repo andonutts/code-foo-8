@@ -67,7 +67,7 @@ if (mysqli_query($conn, $querymsg) === true) {
 $querymsg = "CREATE TABLE content(
              content_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              title VARCHAR(255) NOT NULL,
-             description VARCHAR(1024) NOT NULL,
+             description VARCHAR(2000) NOT NULL,
              pub_date DATETIME NOT NULL,
              slug VARCHAR(255) NOT NULL,
              guid VARCHAR(255) UNIQUE NOT NULL,
