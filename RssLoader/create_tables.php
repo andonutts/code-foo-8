@@ -30,6 +30,7 @@ mysqli_query($conn, "DROP TABLE IF EXISTS states;");
 mysqli_query($conn, "DROP TABLE IF EXISTS networks;");
 mysqli_query($conn, "DROP TABLE IF EXISTS categories;");
 
+// create 'categories' table
 $querymsg = "CREATE TABLE categories(
              category_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              category_name VARCHAR(255) UNIQUE NOT NULL,
@@ -42,6 +43,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'networks' table
 $querymsg = "CREATE TABLE networks(
              network_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              network_name VARCHAR(255) UNIQUE NOT NULL
@@ -53,6 +55,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'states' table
 $querymsg = "CREATE TABLE states(
              state_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              state_name VARCHAR(255) UNIQUE NOT NULL
@@ -64,6 +67,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'content' table 
 $querymsg = "CREATE TABLE content(
              content_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              title VARCHAR(255) NOT NULL,
@@ -85,6 +89,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'img_sizes' table
 $querymsg = "CREATE TABLE img_sizes(
              size_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              size_name VARCHAR(255) UNIQUE NOT NULL,
@@ -98,6 +103,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'thumbnails' table
 $querymsg = "CREATE TABLE thumbnails(
              thumbnail_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              thumbnail_url VARCHAR(255) UNIQUE NOT NULL,
@@ -111,6 +117,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'tags' table
 $querymsg = "CREATE TABLE tags(
              tag_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
              tag_name VARCHAR(255) UNIQUE NOT NULL
@@ -122,6 +129,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'content_tag' table
 $querymsg = "CREATE TABLE content_tag(
              content_id INT NOT NULL,
              tag_id INT NOT NULL,
@@ -136,6 +144,7 @@ if (mysqli_query($conn, $querymsg) === true) {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
 
+// create 'content_thumbnail' table
 $querymsg = "CREATE TABLE content_thumbnail(
              content_id INT NOT NULL,
              thumbnail_id INT NOT NULL,
@@ -149,24 +158,6 @@ if (mysqli_query($conn, $querymsg) === true) {
 } else {
     echo "Error creating table: " . mysqli_error($conn) . "\n";
 }
-/*
-$querymsg = "INSERT INTO categories (content_type_name, directory_url)
-             VALUES ('article', 'http://www.ign.com/articles/');";
 
-if (mysqli_query($conn, $querymsg) === true) {
-    echo "Record 'article' added to 'categories' successfully\n";
-} else {
-    echo "Error: " . $querymsg . "\n" . mysqli_error($conn);
-}
-
-$querymsg = "INSERT INTO categories (content_type_name, directory_url)
-             VALUES ('video', 'http://www.ign.com/videos/');";
-
-if (mysqli_query($conn, $querymsg) === true) {
-    echo "Record 'video' added to 'categories' successfully\n";
-} else {
-    echo "Error: " . $querymsg . "\n" . mysqli_error($conn);
-}
-*/
 mysqli_close($conn);
 ?>
