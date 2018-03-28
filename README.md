@@ -61,7 +61,7 @@ Now simply execute the following commands from the `RssLoader` directory:
 
 **Warning**: If using a pre-existing database, be aware that executing `php create_tables.php` will drop any tables named `content_tag`, `tags`, `content`, `thumbnails`, `img_sizes`, `states`, `networks`, or `categories`.
 
-All done! The tables should now be populated with RSS data from https://ign-apis.herokuapp.com/content/feed.rss.
+All done! The tables should now be populated with the RSS data.
 
 ### Database Design
 
@@ -69,11 +69,13 @@ All done! The tables should now be populated with RSS data from https://ign-apis
   <img src="./RssLoader/rss_db.png" alt="Database diagram">
 </p>
 
-The primary data-storing table in the design is the `content` table. This table holds data pertaining to each item in the RSS feed, including the title, description, publication date, URL, and GUID. The `content` table also contains foreign keys, referencing the `categories`, `networks`, and `states` tables. These tables exist primarily to enable future expansion/changes and also reduce data redundancy. For example, if IGN were to change its name to, say, JGN, we would only have to update the 'IGN' record in the `networks` table, instead of every single record in the `content` table.
+The primary data-storing table in the design is the `content` table. This table holds data pertaining to each item in the RSS feed, including the title, description, publication date, URL, and GUID. The `content` table also contains foreign keys referencing the `categories`, `networks`, and `states` tables. These tables exist primarily to enable future expansion/changes and also reduce data redundancy. For example, if IGN were to change its name to, say, JGN, we would only have to update the 'IGN' record in the `networks` table, instead of every single record in the `content` table.
 
 The next tables I'd like to discuss are the `tags` and `thumbnails` tables. The contents of these tables are fairly self-explanatory, but since a single `content` record can potentially have multiple tags and thumbnails, their relationship to the `content` table is a bit more sophisticated. To solve this problem, we introduce the intermediate tables `content_tag` and `content_thumbnail`, which define a many-to-many relationship between the participating tables.
 
 Finally, we're left with the `img_sizes` table, which simply serves the same purpose as the `categories`, `networks`, and `states` tables in relation to the `content` table. However, `img_sizes` is referenced by the `thumbnails` table instead.
+
+One last note on data validation: most of the table columns in the database are constrained by `UNIQUE` and `NOT NULL` keywords. This helps to preserve the integrity of the data, preventing duplicate/empty entries. It also greatly simplifies the process of coding the data-loading scripts, allowing them to be agnostic about the actual contents of the database. You can check the Appendix below to see which constraints have been applied to each field.
 
 ### Appendix
 
