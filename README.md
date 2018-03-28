@@ -16,13 +16,101 @@ Thank you for your time and consideration!
 
 ## 3. ChickenRoad
 
+A Java console application used to calculate paths for crossing a road, represented as a rectangular grid with obstacles.
+
 ### Prerequisites
 
 *  Java SE 1.7+
 
 ### Usage
 
+To compile the Java program, open a shell instance and navigate to the `ChickenRoad/src/andypasti/chickenroad/` directory. Then use the `javac` command to compile the program:
 
+```
+> javac ChickenRoad.java
+```
+
+There should now be a .class file in the same directory.
+
+Since the program uses the package `andypasti.chickenroad`, navigate back to the `ChickenRoad/src/` directory. From here, execute the Java class with the command:
+
+```
+> java andypasti.chickenroad.ChickenRoad
+```
+
+You should now be greeted by the program's introductory text:
+
+```
+Input the road grid below, row by row. The letter 'O' represents a traversable space,
+while the letter 'X' represents a pothole. Use a semicolon to denote the end of the input.
+Input is case-insensitive, and all whitespace will be ignored.
+```
+
+The program is now ready to accept your input grids! Here's an example:
+
+Input:
+```
+O O X X
+X O O O
+O O X O
+O O O O;
+```
+
+Output:
+```
+Road grid:
+O O X X
+X O O O
+O O X O
+O O O O
+
+Valid paths when starting at (0, 0):
+(0, 0) -> (0, 1) -> (1, 1) -> (1, 2) -> (2, 2) -> (3, 2)
+(0, 0) -> (0, 1) -> (1, 1) -> (1, 0) -> (2, 0) -> (3, 0)
+(0, 0) -> (1, 0) -> (1, 1) -> (1, 2) -> (2, 2) -> (3, 2)
+(0, 0) -> (1, 0) -> (2, 0) -> (3, 0)
+
+Total valid paths from starting point (0, 0) is 4
+```
+
+Note: The program selects a starting point at random, so your exact results may vary.
+
+### Input validation
+
+The program performs input validation to prevent bad entries from confusing the algorithm. Specifically, the following cases are checked:
+  * Non-rectangular grids, i.e. the number of characters in a row varies
+  * Invalid characters, i.e. any characters besides 'X' and 'O'
+  * No valid starting points, i.e. the left column of the grid has no traversable spaces
+  * Excessive whitespace/newlines
+  * Varying letter case
+
+The following 4 inputs represent the same grid to the program:
+
+```
+O X O X
+O O X O
+X O O O
+O O O O;
+
+OXOX
+O O O X
+XO   OO
+O   O  O O;
+
+o X o X
+o o X o
+X o o o
+O O o O;
+
+oxox
+
+ooxo
+
+xooo
+oooo
+
+;
+```
 
 ## 4. Back end: RssLoader
 
@@ -63,7 +151,7 @@ Now simply execute the following commands from the `RssLoader` directory:
 
 All done! The tables should now be populated with the RSS data.
 
-### Database Design
+### Database design
 
 <p align="center">
   <img src="./RssLoader/rss_db.png" alt="Database diagram">
