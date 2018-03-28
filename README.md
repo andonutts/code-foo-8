@@ -104,6 +104,7 @@ o o X o
 X o o o
 O O o O;
 ```
+```
 oxox
 
 ooxo
