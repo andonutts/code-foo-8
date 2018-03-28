@@ -30,7 +30,7 @@ for ($i = 1; $i <= 20; $i++) {
     // iterate through each RSS item and add it to the database
     foreach($content_list as $content) {
         $ns_ign = $content->children('ign', true);
-        // echo $ns_ign->thumbnail[0]->attributes()['link'] . "\n";
+
         addContent(
             $content->title,
             $content->description,
@@ -39,10 +39,11 @@ for ($i = 1; $i <= 20; $i++) {
             $ns_ign->slug,
             $content->guid,
             $content->category,
-            $ns_ign->network,
+            $ns_ign->networks,
             $ns_ign->state
         );
 
+        // add the tags to the database
         $tags = explode(",", $ns_ign->tags);
         foreach($tags as $tag) {
             if($tag != "") {
@@ -50,6 +51,7 @@ for ($i = 1; $i <= 20; $i++) {
             }
         }
         
+        // add the thumbnails to the database
         foreach($ns_ign->thumbnail as $thumbnail) {
             addContentThumbnail(
                 $content->guid, 
