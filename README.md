@@ -91,17 +91,19 @@ O X O X
 O O X O
 X O O O
 O O O O;
-
+```
+```
 OXOX
 O O O X
 XO   OO
 O   O  O O;
-
+```
+```
 o X o X
 o o X o
 X o o o
 O O o O;
-
+```
 oxox
 
 ooxo
