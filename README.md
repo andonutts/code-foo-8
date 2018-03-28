@@ -69,12 +69,83 @@ All done! The tables should now be populated with RSS data from https://ign-apis
   <img src="./RssLoader/rss_db.png" alt="Database diagram">
 </p>
 
-Inspecting `create_tables.php`, we can see that the following MySQL queries were used to generate the tables:
+The primary data-storing table in the design is the `content` table. This table holds data pertaining to each item in the RSS feed, including the title, description, publication date, URL, and GUID. The `content` table also contains foreign keys, referencing the `categories`, `networks`, and `states` tables. These tables exist primarily to enable future expansion/changes and also reduce data redundancy. For example, if IGN were to change its name to, say, JGN, we would only have to update the 'IGN' record in the `networks` table, instead of every single record in the `content` table.
 
-```
-```
+The next tables I'd like to discuss are the `tags` and `thumbnails` tables. The contents of these tables are fairly self-explanatory, but since a single `content` record can potentially have multiple tags and thumbnails, their relationship to the `content` table is a bit more sophisticated. To solve this problem, we introduce the intermediate tables `content_tag` and `content_thumbnail`, which define a many-to-many relationship between the participating tables.
 
-My approach to designing the database began with an observation of the data to be stored. 
+Finally, we're left with the `img_sizes` table, which simply serves the same purpose as the `categories`, `networks`, and `states` tables in relation to the `content` table. However, `img_sizes` is referenced by the `thumbnails` table instead.
+
+### Appendix
+
+The following MySQL queries were used to implement the database design:
+
+```sql
+CREATE TABLE categories(
+  category_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  category_name VARCHAR(255) UNIQUE NOT NULL,
+  directory_url VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE networks(
+  network_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  network_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE states(
+  state_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  state_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE content(
+  content_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  pub_date DATETIME NOT NULL,
+  link VARCHAR(255) NOT NULL,
+  guid VARCHAR(255) UNIQUE NOT NULL,
+  category_id INT NOT NULL,
+  network_id INT NOT NULL,
+  state_id INT NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES categories(category_id),
+  FOREIGN KEY (network_id) REFERENCES networks(network_id),
+  FOREIGN KEY (state_id) REFERENCES states(state_id)
+);
+
+CREATE TABLE img_sizes(
+  size_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  size_name VARCHAR(255) UNIQUE NOT NULL,
+  width INT NOT NULL,
+  height INT NOT NULL
+);
+
+CREATE TABLE thumbnails(
+  thumbnail_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  thumbnail_url VARCHAR(255) UNIQUE NOT NULL,
+  size_id INT NOT NULL,
+  FOREIGN KEY (size_id) REFERENCES img_sizes(size_id)
+);
+
+CREATE TABLE tags(
+  tag_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  tag_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE content_tag(
+  content_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY (content_id, tag_id),
+  FOREIGN KEY (content_id) REFERENCES content(content_id),
+  FOREIGN KEY (tag_id) REFERENCES tags(tag_id)
+);
+
+CREATE TABLE content_thumbnail(
+  content_id INT NOT NULL,
+  thumbnail_id INT NOT NULL,
+  PRIMARY KEY (content_id, thumbnail_id),
+  FOREIGN KEY (content_id) REFERENCES content(content_id),
+  FOREIGN KEY (thumbnail_id) REFERENCES thumbnails(thumbnail_id)
+);
+```
 
 ## Survey
 
