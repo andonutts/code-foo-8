@@ -17,7 +17,7 @@ namespace Andypasti\RssLoader;
  * @param string $title          title of the content
  * @param string $description    description of the content
  * @param string $pub_date_str   publication date in string format
- * @param string $url            full URL used to access the content
+ * @param string $link            full URL used to access the content
  * @param string $slug           URL valid name of the content
  * @param string $guid           GUID of the content
  * @param string $category       the category, e.g. 'article', 'video'
@@ -28,7 +28,7 @@ function addContent(
     string $title,
     string $description,
     string $pub_date_str,
-    string $url,
+    string $link,
     string $slug,
     string $guid,
     string $category,
@@ -42,7 +42,7 @@ function addContent(
     $pub_date_mysql = date("Y-m-d H:i:s", $pub_date_timestamp);
 
     // obtain the directory URL by removing the resource name (slug) from the URL
-    $directory_url = str_replace($slug, "", $url);
+    $directory_url = str_replace($slug, "", $link);
 
     // add the category to the 'categories' table if it does not exist
     addCategory($category, $directory_url);
@@ -60,14 +60,14 @@ function addContent(
 
     // finally, insert the new content record
     $stmt = $conn->prepare(
-        "INSERT INTO content (title, description, pub_date, slug, guid, category_id, network_id, state_id)
+        "INSERT INTO content (title, description, pub_date, link, guid, category_id, network_id, state_id)
          VALUES (?, ?, DATE(?), ?, ?,
          (SELECT category_id FROM categories WHERE category_name=? LIMIT 1),
          (SELECT network_id FROM networks WHERE network_name=? LIMIT 1),
          (SELECT state_id FROM states WHERE state_name=?));"
     );
     
-    $stmt->bind_param("ssssssss", $title, $description, $pub_date_mysql, $slug, $guid, $category, $network, $state);
+    $stmt->bind_param("ssssssss", $title, $description, $pub_date_mysql, $link, $guid, $category, $network, $state);
     $stmt->execute();
     $stmt->close();
 
@@ -114,52 +114,6 @@ function removeAllContent()
     mysqli_query($conn, "SET SQL_SAFE_UPDATES = 1;");
 
     mysqli_close($conn);
-}
-
-/**
- * Returns the URL of the content record specified by the provided guid.
- * 
- * @param string $guid guid of the content whose URL is to be returned
- */
-function getContentUrl(string $guid) 
-{
-    include "db_config.php";
-
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$conn) {
-        die("MySQL connection failed: " . mysqli_connect_error());
-    }
-    
-    // first, we obtain the category_id and slug
-    $stmt = $conn->prepare(
-        "SELECT category_id, slug
-         FROM content
-         WHERE guid = ?;"
-    );
-    
-    $stmt->bind_param("s", $guid);
-    $stmt->execute();
-    $stmt->bind_result($category_id, $slug);
-    $stmt->fetch();
-    $stmt->close();
-
-    // use the category_id to obtain the directory URL
-    $stmt = $conn->prepare(
-        "SELECT directory_url 
-         FROM categories 
-         WHERE category_id = ?;"
-    );
-
-    $stmt->bind_param("s", $category_id);
-    $stmt->execute();
-    $stmt->bind_result($directory_url);
-    $stmt->fetch();
-    $stmt->close();
-
-    mysqli_close($conn);
-
-    // concatenate the directory URL and the slug to obtain the full URL
-    return $directory_url . $slug;
 }
 
 /**
@@ -298,7 +252,6 @@ function addContentThumbnail(string $guid, string $thumbnail_url, string $size_n
 
     $stmt->bind_param("ss", $guid, $thumbnail_url);
     $stmt->execute();
-    echo $stmt->error;
     $stmt->close();
 
     mysqli_close($conn);
@@ -331,7 +284,6 @@ function addThumbnail(string $thumbnail_url, string $size_name, int $width, int 
 
     $stmt->bind_param("ss", $thumbnail_url, $size_name);
     $stmt->execute();
-    echo $stmt->error . "\n";
     $stmt->close();
 
     mysqli_close($conn);
