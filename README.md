@@ -1,6 +1,20 @@
-# code-foo-8
+# Code Foo 8 Application
 
-IGN Code Foo 8 application
+## Table of Contents
+
+- [1. About me](#1-about-me)
+- [2. Rebuilding the Eiffel Tower](#2-building-the-eiffel-tower-out-of-geomags)
+- [3. ChickenRoad](#3-chickenroad)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+  - [Input validation](#input-validation)
+  - [Implementation](#implementation)
+- [4. Back end: RssLoader](#4-back-end-rssloader)
+  - [Prerequisites](#prerequisites-1)
+  - [Usage](#usage-1)
+  - [Database design](#database-design)
+  - [Appendix](#appendix)
+- [Survey info](#survey-info)
 
 ## 1. About me
 
@@ -12,7 +26,7 @@ Even though my academic background isn't in software engineering, I have had a h
 
 Thank you for your time and consideration!
 
-## 2. Building the Eiffel Tower out of Geomags&#8482;
+## 2. Rebuilding the Eiffel Tower
 
 ## 3. ChickenRoad
 
@@ -20,7 +34,7 @@ A Java console application used to calculate paths for crossing a road, represen
 
 ### Prerequisites
 
-*  Java SE 1.7+
+* Java SE 1.7+
 
 ### Usage
 
@@ -283,6 +297,6 @@ CREATE TABLE content_thumbnail(
 );
 ```
 
-## Survey
+## Survey info
 
 I discovered this application via Twitter post by @IGN.
