@@ -1,9 +1,11 @@
 # Code Foo 8 Application
 
+By Andy He
+
 ## Table of Contents
 
 - [1. About me](#1-about-me)
-- [2. Rebuilding the Eiffel Tower](#2-building-the-eiffel-tower-out-of-geomags)
+- [2. Rebuilding the Eiffel Tower](#2-rebuilding-the-eiffel-tower)
 - [3. ChickenRoad](#3-chickenroad)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
