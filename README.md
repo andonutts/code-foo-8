@@ -169,7 +169,7 @@ A series of PHP scripts used to create tables in a MySQL database, then load the
 
 ### Usage
 
-First, connect to your MySQL server and create a database with a name of your choosing. For example:
+First, open a shell instance, connect to your MySQL server, and create a database with a name of your choosing. For example:
 
 ```
 mysql> CREATE DATABASE codefoo8;
