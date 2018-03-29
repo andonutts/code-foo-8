@@ -118,7 +118,9 @@ oooo
 
 ### Implementation
 
-The path calculation is implemented using a recursive algorithm that checks each adjacent "tile" in the grid. In `ChickenRoad.java`, the algorithm is implemented by the method
+The path calculation is implemented using a recursive algorithm that checks each adjacent "tile" in the grid. By checking adjacent tiles in a specific order (north, then east, then south), every possible path to the destination can be found in a manner similar to the traversal of a tree data structure. Visited tiles are marked as untraversable (potholes) in order to avoid backtracking and infinite loops. Since this solution takes advantage of recursion, input grids can be any size.
+
+In `ChickenRoad.java`, the algorithm is implemented by the method
 
 ```java
 void checkTile(int x, int y, char[][] road, String path, int[] pathCount)
@@ -143,7 +145,7 @@ function checkTile(x, y, road, path, pathCount) {
     Increment pathCount
     Return
 
-  Set road(x, y) to pothole
+  Set road(x, y) to pothole // this prevents backtracking
 
   Concatenate " -> " to path
   checkTile(x, y + 1, road, path, pathCount);
