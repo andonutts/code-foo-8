@@ -5,7 +5,7 @@ By Andy He
 ## Table of Contents
 
 - [1. About me](#1-about-me)
-- [2. Rebuilding the Eiffel Tower](#2-rebuilding-the-eiffel-tower)
+- [2. Rebuilding the Eiffel Tower](#2-rebuilding-the-eiffel-tower-out-of-geomags)
 - [3. ChickenRoad](#3-chickenroad)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
@@ -28,7 +28,36 @@ Even though my academic background isn't in software engineering, I have had a h
 
 Thank you for your time and consideration!
 
-## 2. Rebuilding the Eiffel Tower
+## 2. Rebuilding the Eiffel Tower out of Geomags
+
+How does one estimate the number of Geomags required to reconstruct the Eiffel Tower? Here's an outline of my approach:
+  1. Find the volume of the Eiffel Tower
+  2. Determine a Geomags "unit cell" that we can use as a fundamental building block
+  3. Divide the volume of the Eiffel Tower by the volume of a single unit cell to obtain the number of unit cells
+  4. Get the final result by multiplying the number of unit cells by the number of Geomags required to construct a single unit cell
+
+First, we want to find the volume of the Eiffel Tower. This is a tricky problem because the Eiffel Tower is not a simple shape. Its profile roughly resembles that of a tall pyramid with two large sections removed near the base, but since the Tower is constructed as an exposed lattice of iron beams, it shares that space with a large volume of air. Assuming our goal is a beam-for-beam recreation of the original Eiffel Tower, we should ignore air in our calculation. We could recreate the Tower in a CAD program such as Blender and have it calculate the volume for us, but there is another, more timely approach. We can calculate volume by using the formula for density:
+
+```
+density = mass / volume
+```
+
+Which we can rearrange as:
+
+```
+volume = mass / density
+```
+
+We can use this method thanks to two facts that greatly simplify our problem:
+
+  1. The mass of the Eiffel Tower is known to be approximately 7300 tons, according to accounting records kept by the original metal suppliers
+  2. The metal structure of the Tower consists almost entirely of wrought iron, which has a density of 7750 kg/m<sup>3</sup>
+
+Hence, the volume of the Eiffel Tower's metal structure is approximately
+
+```
+7300000 / 7750 = 942 m^3
+```
 
 ## 3. ChickenRoad
 
