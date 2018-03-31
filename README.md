@@ -1,13 +1,13 @@
 # Code Foo 8 Application
 
-By Andy He
+by Andy He
 
 ## Table of Contents
 
 - [1. About me](#1-about-me)
 - [2. Rebuilding the Eiffel Tower out of Geomags](#2-rebuilding-the-eiffel-tower-out-of-geomags)
   - [Volume of the Eiffel Tower](#volume-of-the-eiffel-tower)
-  - [Geomags unit cell](#geomags-unit-cell)
+  - [The Geomag unit cell](#the-geomag-unit-cell)
   - [Final calculations](#final-calculations)
   - [References](#references)
 - [3. ChickenRoad](#3-chickenroad)
@@ -36,7 +36,7 @@ Thank you for your time and consideration!
 
 How does one estimate the number of Geomags required to reconstruct the Eiffel Tower? Here's an outline of my approach:
   1. Find the volume of the Eiffel Tower
-  2. Determine a Geomags "unit cell" that we can use as a fundamental building block
+  2. Define a Geomag "unit cell" that we can use as a fundamental building block
   3. Divide the volume of the Eiffel Tower by the volume of a single unit cell to obtain the number of unit cells
   4. Get the final result by multiplying the number of unit cells by the number of Geomags required to construct a single unit cell
 
@@ -48,7 +48,7 @@ First, we want to find the volume of the Eiffel Tower. This is a tricky problem 
 density = mass / volume
 ```
 
-Which we can rearrange as:
+Rearranging to solve for volume:
 
 ```
 volume = mass / density
@@ -65,9 +65,11 @@ Hence, the volume of the Eiffel Tower's metal structure is approximately
 7300000 / 7750 = 942 m^3
 ```
 
-### Geomags unit cell
+### The Geomag unit cell
 
+Next, we need to define the structure of our Geomag unit cell. Before delving into that discussion, you might be wondering why we need to define a unit cell, or what a unit cell is in the first place. In solid state physics, a unit cell is the smallest repeating unit that makes up a crystal lattice. The analogy works especially well in this problem because Geomags are designed to facilitate the construction of crystal-like structures (the magnetic spheres and rods represent atoms and their bonds, respectively).
 
+Defining a unit cell allows us to simplify our math; since it is a repeating unit, we simply divide the total volume by the volume of a unit cell to obtain the total number of unit cells. However, we have to be careful with how we design our unit cell. A poor unit cell structure could result in a structurally unsound tower or wasteful design. For example, we could define our unit cell as a single Geomag rod, meaning the composition of our Eiffel Tower would consist of repeated layers of sheets of Geomag rods. This method would not only be incredibly inefficient but also possibly susceptible to shearing forces due to the layered structure. Alternatively, consider a simple cubic unit cell constructed from 8 Geomag spheres and 12 Geomag rods. This would use considerably fewer resources, but structural integrity would be a huge concern, as simple cubes are very unstable structures.
 
 ### Final calculations
 
@@ -93,7 +95,7 @@ To compile the Java program, open a shell instance and navigate to the `ChickenR
 > javac ChickenRoad.java
 ```
 
-There should now be a .class file in the same directory.
+There should now be a `ChickenRoad.class` file in the same directory.
 
 Since the program uses the package `andypasti.chickenroad`, navigate up to the `ChickenRoad/src/` directory. From here, execute the Java class with the command:
 
