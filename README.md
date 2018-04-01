@@ -69,11 +69,66 @@ Hence, the volume of the Eiffel Tower's metal structure is approximately
 
 Next, we need to define the structure of our Geomag unit cell. Before delving into that discussion, you might be wondering why we need to define a unit cell, or what a unit cell is in the first place. In solid state physics, a unit cell is the smallest repeating unit that makes up a crystal lattice. The analogy works especially well in this problem because Geomags are designed to facilitate the construction of crystal-like structures (the magnetic spheres and rods represent atoms and their bonds, respectively).
 
-Defining a unit cell allows us to simplify our math; since it is a repeating unit, we simply divide the total volume by the volume of a unit cell to obtain the total number of unit cells. However, we have to be careful with how we design our unit cell. A poor unit cell structure could result in a structurally unsound tower or wasteful design. For example, we could define our unit cell as a single Geomag rod, meaning the composition of our Eiffel Tower would consist of repeated layers of sheets of Geomag rods. This method would not only be incredibly inefficient but also possibly susceptible to shearing forces due to the layered structure. Alternatively, consider a simple cubic unit cell constructed from 8 Geomag spheres and 12 Geomag rods. This would use considerably fewer resources, but structural integrity would be a huge concern, as simple cubes are very unstable structures.
+Defining a unit cell allows us to simplify our math; since it is a repeating unit, we simply divide the total volume by the volume of a unit cell to obtain the total number of unit cells. However, we have to be careful with how we design our unit cell. A poor unit cell structure could result in a structurally unsound tower or wasteful design. For example, we could define our unit cell as a single Geomag rod, meaning the composition of our Eiffel Tower would consist entirely of repeated layers of sheets of Geomag rods. This method would not only be incredibly inefficient but also leaves the Tower possibly susceptible to shearing forces due to the layered structure. Alternatively, consider a simple cubic unit cell constructed from 8 spheres and 12 rods. While this would use considerably fewer resources, structural integrity would be a huge concern as simple cubes are highly unstable standalone structures.
+
+So how should we design our unit cell? My original inclination was to use some pattern of tetrahedra (triangular pyramids), which are strong because triangles are inherently rigid. Eventually, my research led me to the "octet truss," a structure commonly used in architecture as a space frame.
+
+The unit cell of an octet truss consists of 8 tetrahedra, forming an octahedron at its center. Here's what a single octet truss unit cell might look like when built out of Geomags:
+
+<p align="center">
+  <img src="./octet_truss.png" alt="Octet truss">
+</p>
+
+There is one problem, however. The "unit cell" shown above is actually not repeatable. If we tried to create another instance of this unit cell and place it next to the original one, it would not fit, as you can see:
+
+<p align="center">
+  <img src="./octet_truss_incorrect.png" alt="Attempt to tile octet truss unit cell">
+</p>
+
+To fix this, we remove all of the rods and spheres from 3 of the unit cell's faces (1 from each dimension). In doing so, each pair of adjacent unit cells will share an intersecting set of rods and spheres. Finally, our final result for the unit cell is:
+
+<p align="center">
+  <img src="./octet_truss_unit.png" alt="Octet truss unit cell">
+</p>
+
+Our unit cell contains 4 Geomag spheres and 24 Geomag rods.
 
 ### Final calculations
 
+Now that we've defined our Geomag unit cell, we need to calculate its volume. Based on the Geomag dimensions provided at [the Geomag Wiki](http://geomag.wikia.com/wiki/Geomag_Weights_and_Measures), we can find the diagonal length of one of the unit cell's faces with the following formula:
 
+```
+2 * sphere diameter + 2 * rod length - 4 * dimple depth
+= 2 * 12.70 mm + 2 * 27.00 mm - 4 * 0.43 mm
+= 77.68 mm
+```
+
+Divide the diagonal length by the square root of 2 to obtain the edge length:
+
+```
+77.68 mm / sqrt(2) = 54.93 mm
+```
+
+So the unit cell volume is:
+
+```
+(54.93 mm)^3 = 165722.95 mm^3 = 1.657E-4 m^3
+```
+
+We can now divide the volume of the Eiffel Tower by the volume of the unit cell to get the number of unit cells required.
+
+```
+942 m^3 / 1.657E-4 m^3 = 5684186 unit cells
+```
+
+Finally, we multiply the number of unit cells by the number of rods and spheres in a single unit cell to get our final answer.
+
+```
+Total Geomag spheres = 4 * 5684186 = 22736744
+Total Geomag rods = 24 * 5684186 = 136420464
+```
+
+So our reconstruction of the Eiffel Tower requires 22,736,744 Geomag spheres and 136,420,464 Geomag rods.
 
 ### References
 
