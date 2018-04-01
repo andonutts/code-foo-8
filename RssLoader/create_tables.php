@@ -25,7 +25,7 @@ if (!$conn) {
     die("MySQL connection failed: " . mysqli_connect_error());
 }
 
-echo "Removing previous tables";
+echo "Removing previous tables\n";
 
 mysqli_query($conn, "DROP TABLE IF EXISTS content_thumbnail;");
 mysqli_query($conn, "DROP TABLE IF EXISTS content_tag;");
@@ -37,7 +37,7 @@ mysqli_query($conn, "DROP TABLE IF EXISTS states;");
 mysqli_query($conn, "DROP TABLE IF EXISTS networks;");
 mysqli_query($conn, "DROP TABLE IF EXISTS categories;");
 
-echo "Creating tables";
+echo "Creating tables\n";
 
 // create 'categories' table
 $querymsg = "CREATE TABLE categories(
