@@ -6,19 +6,26 @@ namespace Andypasti\RssLoader;
  * Creates MySQL tables
  * 
  * Connects to MySQL using the credentials defined in 'mysql_login.php'. If the
- * connection is successful, the tables are dropped if they already exist, then
- * created.
+ * connection is successful, the tables are dropped (if they already exist), then
+ * created. Once the tables are created, the built-in PHP extension SimpleXML is 
+ * used to load each RSS page, then add each RSS item to the MySQL database 
+ * specified in 'db_config.php'. Entries with duplicate GUIDs will not be added due
+ * to the UNIQUE constraint applied to the guid column at table creation in
+ * 'create_tables.php'.
  * 
  * PHP version 7.2.3
  */
 
 include "db_config.php";
+include "db_utils.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 if (!$conn) {
     die("MySQL connection failed: " . mysqli_connect_error());
 }
+
+echo "Removing previous tables";
 
 mysqli_query($conn, "DROP TABLE IF EXISTS content_thumbnail;");
 mysqli_query($conn, "DROP TABLE IF EXISTS content_tag;");
@@ -29,6 +36,8 @@ mysqli_query($conn, "DROP TABLE IF EXISTS content;");
 mysqli_query($conn, "DROP TABLE IF EXISTS states;");
 mysqli_query($conn, "DROP TABLE IF EXISTS networks;");
 mysqli_query($conn, "DROP TABLE IF EXISTS categories;");
+
+echo "Creating tables";
 
 // create 'categories' table
 $querymsg = "CREATE TABLE categories(
@@ -160,4 +169,55 @@ if (mysqli_query($conn, $querymsg) === true) {
 }
 
 mysqli_close($conn);
+
+// iterate through each RSS page
+for ($i = 1; $i <= 20; $i++) {
+    echo "Adding page $i content\n";
+
+    $rss = simplexml_load_file("https://ign-apis.herokuapp.com/content/feed.rss?page=" . $i);
+
+    if($rss === false) {
+        die("Error: Cannot create SimpleXML object");
+    }
+
+    $content_list = $rss->channel->item;
+    
+    // iterate through each RSS item and add it to the database
+    foreach($content_list as $content) {
+        $ns_ign = $content->children('ign', true);
+
+        addContent(
+            $content->title,
+            $content->description,
+            $content->pubDate,
+            $content->link,
+            $ns_ign->slug,
+            $content->guid,
+            $content->category,
+            $ns_ign->networks,
+            $ns_ign->state
+        );
+
+        // add the tags to the database
+        $tags = explode(",", $ns_ign->tags);
+        foreach($tags as $tag) {
+            if($tag != "") {
+                addContentTag($content->guid, $tag);
+            }
+        }
+        
+        // add the thumbnails to the database
+        foreach($ns_ign->thumbnail as $thumbnail) {
+            addContentThumbnail(
+                $content->guid, 
+                $thumbnail->attributes()['link'],
+                $thumbnail->attributes()['size'],
+                intval($thumbnail->attributes()['width']),
+                intval($thumbnail->attributes()['height'])
+            );
+        }
+    }
+}
+
+echo "Done";
 ?>
