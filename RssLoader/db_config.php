@@ -9,8 +9,8 @@
 
 namespace Andypasti\RssLoader;
 
-$servername = 'localhost';
-$username = 'andy';
-$password = 'andy123';
-$dbname = 'codefoo';
+$servername = 'servername';
+$username = 'username';
+$password = 'password';
+$dbname = 'dbname';
 ?>
