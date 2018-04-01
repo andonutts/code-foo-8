@@ -1,7 +1,4 @@
 <?php
-
-namespace Andypasti\RssLoader;
-
 /**
  * Database utility functions
  * 
@@ -11,18 +8,20 @@ namespace Andypasti\RssLoader;
  * PHP version 7.2.3
  */
 
+namespace Andypasti\RssLoader;
+
 /**
  * Adds a content record to the 'content' table with the provided data.
  * 
- * @param string $title          title of the content
- * @param string $description    description of the content
- * @param string $pub_date_str   publication date in string format
- * @param string $link            full URL used to access the content
- * @param string $slug           URL valid name of the content
- * @param string $guid           GUID of the content
- * @param string $category       the category, e.g. 'article', 'video'
- * @param string $network        network that produced the content
- * @param string $state          state of the publication, e.g. 'published', 'unpublished'
+ * @param string $title        title of the content
+ * @param string $description  description of the content
+ * @param string $pub_date_str publication date in string format
+ * @param string $link         full URL used to access the content
+ * @param string $slug         URL valid name of the content
+ * @param string $guid         GUID of the content
+ * @param string $category     the category, e.g. 'article', 'video'
+ * @param string $network      network that produced the content
+ * @param string $state        state of the publication, e.g. 'published', 'unpublished'
  */
 function addContent(
     string $title,
@@ -372,6 +371,60 @@ function addTag(string $tag_name)
     $stmt->close();
 
     mysqli_close($conn);
+}
+
+/**
+ * Returns a mysqli_result object containing all content titles associated with the
+ * given list of tags. 
+ * 
+ * @param array $tag_list list of tags to search by
+ */
+function getContentByTags(array $tag_list) 
+{
+    include "db_config.php";
+
+    if (count($tag_list) == 0) {
+        die("Error: empty tag list");
+    }
+
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    if (!$conn) {
+        die("MySQL connection failed: " . mysqli_connect_error());
+    }
+    
+    $tag_types = "s";
+    $query = "SELECT content.title, content.link
+              FROM ((content
+              INNER JOIN content_tag ON content.content_id = content_tag.content_id)
+              INNER JOIN tags ON content_tag.tag_id = tags.tag_id)
+              WHERE tag_name=?";
+
+    for ($i = 0; $i < count($tag_list)-1; $i++) {
+        $query .= " OR tag_name=?";
+        $tag_types .= "s";
+    }
+
+    $query .= " GROUP BY content.content_id HAVING COUNT(*)=" . count($tag_list) . ";";
+
+    $stmt = $conn->prepare($query);
+
+    $params = $tag_list;
+    array_unshift($params, $tag_types);
+
+    $temp = array();
+    foreach ($params as $key => $value) {
+        $temp[$key] = &$params[$key];
+    }
+
+    call_user_func_array(array($stmt, 'bind_param'), $temp);
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    mysqli_close($conn);
+
+    return $result;
 }
 
 ?>

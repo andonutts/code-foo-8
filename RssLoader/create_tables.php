@@ -1,7 +1,4 @@
 <?php
-
-namespace Andypasti\RssLoader;
-
 /**
  * Creates MySQL tables
  * 
@@ -16,8 +13,10 @@ namespace Andypasti\RssLoader;
  * PHP version 7.2.3
  */
 
-include "db_config.php";
-include "db_utils.php";
+namespace Andypasti\RssLoader;
+
+require "db_config.php";
+require "db_utils.php";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -176,14 +175,14 @@ for ($i = 1; $i <= 20; $i++) {
 
     $rss = simplexml_load_file("https://ign-apis.herokuapp.com/content/feed.rss?page=" . $i);
 
-    if($rss === false) {
+    if ($rss === false) {
         die("Error: Cannot create SimpleXML object");
     }
 
     $content_list = $rss->channel->item;
     
     // iterate through each RSS item and add it to the database
-    foreach($content_list as $content) {
+    foreach ($content_list as $content) {
         $ns_ign = $content->children('ign', true);
 
         addContent(
@@ -200,14 +199,14 @@ for ($i = 1; $i <= 20; $i++) {
 
         // add the tags to the database
         $tags = explode(",", $ns_ign->tags);
-        foreach($tags as $tag) {
-            if($tag != "") {
+        foreach ($tags as $tag) {
+            if ($tag != "") {
                 addContentTag($content->guid, $tag);
             }
         }
         
         // add the thumbnails to the database
-        foreach($ns_ign->thumbnail as $thumbnail) {
+        foreach ($ns_ign->thumbnail as $thumbnail) {
             addContentThumbnail(
                 $content->guid, 
                 $thumbnail->attributes()['link'],
