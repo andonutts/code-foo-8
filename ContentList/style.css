@@ -114,8 +114,9 @@ nav, #load-button {
     left: 7px;
     background-color: #dd3a3a;
     border-radius: 3px;
-    padding: 15px;
+    padding: 18px;
     color: white;
+    font-weight: 700;
 }
 
 .content-metadata {
