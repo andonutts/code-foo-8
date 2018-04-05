@@ -46,9 +46,8 @@ nav, #load-button {
 }
 
 #load-button {
-    border: solid 4px #dd3a3a;
     background-color: #dd3a3a;
-    padding: 5px;
+    padding: 15px;
     font-size: 20px;
     font-weight: 700;
     text-align: center;
@@ -87,10 +86,16 @@ nav, #load-button {
 }
 
 .content-thumbnail {
+    position: relative;
     flex-shrink: 0;
     flex-grow: 1;
     flex-basis: 45%;
     margin: 0 20px 0 0;
+    background-color:white;
+}
+
+.content-thumbnail:hover {
+    opacity: .5;
 }
 
 .content-details {
@@ -101,6 +106,16 @@ nav, #load-button {
 .thumbnail-img {
     border-radius: 4px;
     width: 100%;
+}
+
+.img-duration {
+    position: absolute;
+    bottom: 11px;
+    left: 7px;
+    background-color: #dd3a3a;
+    border-radius: 3px;
+    padding: 15px;
+    color: white;
 }
 
 .content-metadata {

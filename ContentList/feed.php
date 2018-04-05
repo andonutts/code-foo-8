@@ -54,8 +54,11 @@ while($current_count < $count) {
                     $html_output .= '<div class="content-body">'
                                     .'    <div class="content-thumbnail">'
                                     .'        <a href="' . $link . '">'
-                                    .'            <img class="thumbnail-img" src="' . $img_url . '" alt="' . $title . '">'
-                                    .'        </a>'
+                                    .'            <img class="thumbnail-img" src="' . $img_url . '" alt="' . $title . '">';
+                    if($content_type == "video") {
+                        $html_output .= '             <div class="img-duration">' . $duration . '</div>';
+                    }
+                    $html_output .= '        </a>'
                                     .'    </div>'
                                     .'    <div class="content-details">'
                                     .'        <div class="content-metadata">'
