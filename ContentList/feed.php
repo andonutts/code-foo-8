@@ -1,4 +1,10 @@
 <?php
+/**
+ * Collects data from IGN's JSON feed and returns it as HTML code
+ * 
+ * The "contentType" parameter allows the content type to be specified; for example,
+ * contentType=article causes the program to return only articles.
+ */
 $start_index = $_REQUEST["startIndex"];
 $count = $_REQUEST["count"];
 $content_type = $_REQUEST["contentType"];
@@ -10,24 +16,32 @@ $output_list = array();
 $id_str = "";
 
 while($current_count < $count) {
+    // get JSON data
     $content_feed_url = "https://ign-apis.herokuapp.com/content?startIndex=" . $current_index . "&count=10";
     $json_str = file_get_contents($content_feed_url);
     $json_data = json_decode($json_str);
     $content_list = $json_data->{"data"};
     
+    // iterate over each content item
     foreach($content_list as $content) {
         $metadata = $content->{"metadata"};
         $current_index++;
+
+        // if the item is of the desired type, add it to the output list
         if($metadata->{"contentType"} == $content_type) {
+            // collect ID for each content item
             $id_str .= $content->{"contentId"};
             array_push($output_list, $content);
             $current_count++;
+
+            // if the desired amount of content has been found, get the comment count data for each item
             if($current_count >= $count) {
                 $comment_count_url = "https://ign-apis.herokuapp.com/comments?ids=" . $id_str;
                 $json_comment_count_str = file_get_contents($comment_count_url);
                 $json_comment_count_data = json_decode($json_comment_count_str);
                 $comment_counts = $json_comment_count_data->{"content"};
 
+                // build HTML output
                 $html_output = "";
                 foreach($output_list as $key => $output_content) {
                     $comment_count = $comment_counts[$key]->{"count"};
@@ -37,6 +51,8 @@ while($current_count < $count) {
                     $link = "http://www.ign.com/" . $content_type . "s/" . $slug;
                     $img_url = $output_content->{"thumbnails"}[0]->{"url"};
                     $age = datetimeToElapsedTime($metadata->{"publishDate"});
+
+                    // if content type is video, get duration of video
                     if($content_type == "video") {
                         $duration = secondsToMinSec($metadata->{"duration"});
                     }
@@ -45,9 +61,11 @@ while($current_count < $count) {
                                     .'    <div class="content-thumbnail">'
                                     .'        <a href="' . $link . '">'
                                     .'            <img class="thumbnail-img" src="' . $img_url . '" alt="' . $title . '">';
+
                     if($content_type == "video") {
                         $html_output .= '             <div class="img-duration">' . $duration . '</div>';
                     }
+
                     $html_output .= '        </a>'
                                     .'    </div>'
                                     .'    <div class="content-details">'
@@ -61,10 +79,14 @@ while($current_count < $count) {
                                     .'    </div>'
                                     .'</div>';
                 }
+
+                // include the current index in the output data so that the receiving application knows where we left off
                 $output_data = array(
                     "currentIndex" => $current_index,
                     "html" => $html_output
                 );
+
+                // output the content list
                 $output_json = json_encode($output_data);
                 echo $output_json;
                 break;
@@ -74,32 +96,23 @@ while($current_count < $count) {
     }
 }
 
-function msecToAge($msec) {
-    $age = "";
-
-    $ageYears = floor(msec / 31536000000);
-    $ageDays = floor(msec / 86400000);
-    $ageHours = floor(msec / 3600000);
-    $ageMinutes = floor(msec / 60000);
-
-    if($ageYears >= 1) {
-        $age = $ageYears . "y";
-    } else if($ageDays >= 1) {
-        $age = $ageDays . "d";
-    } else if($ageHours >= 1) {
-        $age = $ageHours . "h";
-    } else {
-        $age = $ageMinutes . "m";
-    }
-    return $age;
-}
-
+/**
+ * Converts seconds to string representation of minutes and seconds, formatted as
+ * MM:SS.
+ * 
+ * @param $sec number of seconds
+ */
 function secondsToMinSec($sec) {
     $m = floor($sec / 60);
     $s = $sec % 60;
     return sprintf("%d:%02d", $m, $s);
 }
 
+/**
+ * Calculates approximate amount of time elapsed.
+ * 
+ * @param $datetime formatted string representation of time
+ */
 function datetimeToElapsedTime($datetime) {
     $datetime1 = new DateTime($datetime);
     $datetime2 = new DateTime('now');
