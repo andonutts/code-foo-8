@@ -3,10 +3,6 @@ $start_index = $_REQUEST["startIndex"];
 $count = $_REQUEST["count"];
 $content_type = $_REQUEST["contentType"];
 
-// $start_index = 0;
-// $count = 5;
-// $content_type = "article";
-
 $current_index = $start_index;
 $current_count = 0;
 
@@ -44,12 +40,6 @@ while($current_count < $count) {
                     if($content_type == "video") {
                         $duration = secondsToMinSec($metadata->{"duration"});
                     }
-                    // echo "title: " . $title . "\n";
-                    // echo "img URL: " . $img_url . "\n";
-                    // echo "comment count: " . $comment_count . "\n";
-                    // echo "link: " . $link . "\n";
-                    // echo "age: " . $age . "\n";
-                    // echo "-----\n";
 
                     $html_output .= '<div class="content-body">'
                                     .'    <div class="content-thumbnail">'
