@@ -7,6 +7,7 @@
  * 
  * PHP version 7.2.3
  */
+
 $start_index = $_REQUEST["startIndex"];
 $count = $_REQUEST["count"];
 $content_type = $_REQUEST["contentType"];
