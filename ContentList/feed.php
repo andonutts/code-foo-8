@@ -4,6 +4,8 @@
  * 
  * The "contentType" parameter allows the content type to be specified; for example,
  * contentType=article causes the program to return only articles.
+ * 
+ * PHP version 7.2.3
  */
 $start_index = $_REQUEST["startIndex"];
 $count = $_REQUEST["count"];
@@ -15,7 +17,7 @@ $current_count = 0;
 $output_list = array();
 $id_str = "";
 
-while($current_count < $count) {
+while ($current_count < $count) {
     // get JSON data
     $content_feed_url = "https://ign-apis.herokuapp.com/content?startIndex=" . $current_index . "&count=10";
     $json_str = file_get_contents($content_feed_url);
@@ -23,19 +25,19 @@ while($current_count < $count) {
     $content_list = $json_data->{"data"};
     
     // iterate over each content item
-    foreach($content_list as $content) {
+    foreach ($content_list as $content) {
         $metadata = $content->{"metadata"};
         $current_index++;
 
         // if the item is of the desired type, add it to the output list
-        if($metadata->{"contentType"} == $content_type) {
+        if ($metadata->{"contentType"} == $content_type) {
             // collect ID for each content item
             $id_str .= $content->{"contentId"};
             array_push($output_list, $content);
             $current_count++;
 
             // if the desired amount of content has been found, get the comment count data for each item
-            if($current_count >= $count) {
+            if ($current_count >= $count) {
                 $comment_count_url = "https://ign-apis.herokuapp.com/comments?ids=" . $id_str;
                 $json_comment_count_str = file_get_contents($comment_count_url);
                 $json_comment_count_data = json_decode($json_comment_count_str);
@@ -43,7 +45,7 @@ while($current_count < $count) {
 
                 // build HTML output
                 $html_output = "";
-                foreach($output_list as $key => $output_content) {
+                foreach ($output_list as $key => $output_content) {
                     $comment_count = $comment_counts[$key]->{"count"};
                     $metadata = $output_content->{"metadata"};
                     $title = $metadata->{"title"};
@@ -53,7 +55,7 @@ while($current_count < $count) {
                     $age = datetimeToElapsedTime($metadata->{"publishDate"});
 
                     // if content type is video, get duration of video
-                    if($content_type == "video") {
+                    if ($content_type == "video") {
                         $duration = secondsToMinSec($metadata->{"duration"});
                     }
 
@@ -62,7 +64,7 @@ while($current_count < $count) {
                                     .'        <a href="' . $link . '">'
                                     .'            <img class="thumbnail-img" src="' . $img_url . '" alt="' . $title . '">';
 
-                    if($content_type == "video") {
+                    if ($content_type == "video") {
                         $html_output .= '             <div class="img-duration">' . $duration . '</div>';
                     }
 
@@ -100,9 +102,12 @@ while($current_count < $count) {
  * Converts seconds to string representation of minutes and seconds, formatted as
  * MM:SS.
  * 
- * @param $sec number of seconds
+ * @param int $sec number of seconds
+ * 
+ * @return string formatted time string
  */
-function secondsToMinSec($sec) {
+function secondsToMinSec($sec) 
+{
     $m = floor($sec / 60);
     $s = $sec % 60;
     return sprintf("%d:%02d", $m, $s);
@@ -111,21 +116,24 @@ function secondsToMinSec($sec) {
 /**
  * Calculates approximate amount of time elapsed.
  * 
- * @param $datetime formatted string representation of time
+ * @param string $datetime formatted string representation of time
+ * 
+ * @return string $age approximate time elapsed
  */
-function datetimeToElapsedTime($datetime) {
+function datetimeToElapsedTime($datetime) 
+{
     $datetime1 = new DateTime($datetime);
     $datetime2 = new DateTime('now');
 
     $interval = $datetime1->diff($datetime2);
 
-    if($interval->y >= 1) {
+    if ($interval->y >= 1) {
         $age = $interval->y . "y";
-    } else if($interval->m >= 1) {
+    } else if ($interval->m >= 1) {
         $age = $interval->m . "mo";
-    } else if($interval->d >= 1) {
+    } else if ($interval->d >= 1) {
         $age = $interval->d . "d";
-    } else if($interval->h >= 1) {
+    } else if ($interval->h >= 1) {
         $age = $interval->h . "h";
     } else {
         $age = $interval->i . "m";
