@@ -73,6 +73,7 @@ while ($current_count < $count) {
                                     .'    <div class="content-details">'
                                     .'        <div class="content-metadata">'
                                     .'            <span class="content-age">' . $age . '</span>'
+                                    .'            <span class="separator"> - </span>'
                                     .'            <span class="comment-count">' . $comment_count . '</span>'
                                     .'        </div>'
                                     .'        <a href="' . $link . '">'
